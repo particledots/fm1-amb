@@ -1,0 +1,54 @@
+# the Sound page (the palette, the pulse sound, its chance): SEQ twice, the knobs, saved and carried through a reboot,
+# and the garden still plays with the palette up and the melodic pulse on (nothing clipping, nothing silent)
+wait 300
+tap SEQ
+expect view 4
+tap SEQ
+expect view 5
+wait 100
+shot sound.png
+expect par28 0
+expect par29 0
+expect par30 100
+turn K2 1
+expect par29 1
+turn K1 100 20
+expect par28 100
+turn K3 -30 100
+expect par30 70
+shot sound_on.png
+# the Pulse page is one step left of it, Space one step right
+turn SELECT -1 100
+expect view 4
+turn SELECT 2 100
+expect view 6
+tap SEQ
+expect view 4
+tap SEQ
+expect view 5
+# a quiet minute with it all on
+wav sound.wav
+tap PLAY
+tap PLAY
+wait 20000
+expect playing 1
+expect sixteenths >40
+wavstop
+expect peak_db_max -0.5
+expect peak_db_min -35
+expect midi_out >0
+# kept with the piece, through a save and a reboot
+tap SAVE
+reboot
+wait 300
+expect par28 100
+expect par29 1
+expect par30 70
+# another piece keeps its own, and the defaults for a piece not touched
+turn PRESET 1
+expect par28 0
+expect par29 0
+expect par30 100
+turn PRESET -1
+expect par28 100
+expect par29 1

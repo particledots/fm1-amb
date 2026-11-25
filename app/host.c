@@ -5,7 +5,8 @@
  *
  * AMB-1's checks: playing frozen view piece pool dirty sixteenths ext pad_level bass_level chordroot chordN loopnotes
  * parN battery (fm1-base's own: store_writes clocks_out midi_out peak_db_max peak_db_min). Its commands: storev3 N
- * (the project as AMB-1 0.9 before the layer pages wrote it, format 3, the playing piece's Pad at N); battery N (the
+ * (the project as AMB-1 0.9 before the layer pages wrote it, format 3, the playing piece's Pad at N); storev4 N (format 4,
+ * before the palette and the pulse sound); battery N (the
  * battery read as N, plat.h's plat_battery: -1..4; "battery off" the simulator's own, full). */
 
 int app_expect(const char *what, int *got)
@@ -72,6 +73,27 @@ int app_host_cmd(const char *cmd, const char *a, const char *b, const char *c, c
         o.piece = proj.piece;
         for (i = 0; i < NPIECES; i++) {
             for (k = 0; k < V3_NPARAMS; k++)
+                o.slot[i].par[k] = proj.slot[i].par[k];
+            o.slot[i].pool = proj.slot[i].pool;
+        }
+        o.slot[proj.piece].par[P_PAD] = o.par[P_PAD];
+        plat_store_save(OBJ_PROJ, &o, sizeof o);
+        return 1;
+    }
+    if (!strcmp(cmd, "storev4")) {               /* storev4 N: format 4 (before the palette), the playing piece's Pad at N */
+        static project_v4_t o;
+        int i, k;
+        memset(&o, 0, sizeof o);
+        o.magic = PROJ_MAGIC;
+        o.format = 4u;
+        for (k = 0; k < V4_NPARAMS; k++)
+            o.par[k] = proj.par[k];
+        o.par[P_PAD] = (int16_t)atoi(a);
+        o.pool = proj.pool;
+        o.leds = proj.leds;
+        o.piece = proj.piece;
+        for (i = 0; i < NPIECES; i++) {
+            for (k = 0; k < V4_NPARAMS; k++)
                 o.slot[i].par[k] = proj.slot[i].par[k];
             o.slot[i].pool = proj.slot[i].pool;
         }

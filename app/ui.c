@@ -15,9 +15,9 @@
 #include "fastmath.h"
 
 /* the pages, one a layer (a button each); SELECT steps through them in this order */
-enum { V_GARDEN, V_PAD, V_BELLS, V_BASS, V_PULSE, V_SPACE, V_SETUP, NVIEWS };
-static const char *const VIEW_NAME[NVIEWS] = {"Garden", "Pad", "Bells", "Bass", "Pulse", "Space", "Setup"};
-static const uint8_t VIEW_BTN[NVIEWS] = {B_HOME, B_ENV, B_ARP, B_LFO, B_SEQ, B_FX, B_GLO};
+enum { V_GARDEN, V_PAD, V_BELLS, V_BASS, V_PULSE, V_SOUND, V_SPACE, V_SETUP, NVIEWS };
+static const char *const VIEW_NAME[NVIEWS] = {"Garden", "Pad", "Bells", "Bass", "Pulse", "Sound", "Space", "Setup"};
+static const uint8_t VIEW_BTN[NVIEWS] = {B_HOME, B_ENV, B_ARP, B_LFO, B_SEQ, B_SEQ, B_FX, B_GLO};   /* SEQ: the Pulse page, pressed again the Sound page */
 /* the four knobs of each page: a parameter, or one of these; and what the knob is called there */
 enum { K_LEDS = 100, K_CPU, K_NONE };
 static const uint8_t VIEW_KNOB[NVIEWS][4] = {
@@ -26,6 +26,7 @@ static const uint8_t VIEW_KNOB[NVIEWS][4] = {
     {P_BELLS, P_DENSITY, P_BTONE, P_BOCT},
     {P_BASS, P_BASSOCT, P_GLIDE, P_FIFTH},
     {P_PULSE, P_HITS, P_SWING, P_HATS},
+    {P_PALETTE, P_PULSEVOICE, P_PULSECHANCE, K_NONE},
     {P_ECHO, P_ETIME, P_REVERB, P_SIZE},
     {P_ROOT, P_TUNE, P_MIDI, K_LEDS},
 };
@@ -35,6 +36,7 @@ static const char *const KNOB_LABEL[NVIEWS][4] = {
     {"Level", "Density", "Tone", "Octave"},
     {"Level", "Octave", "Glide", "Fifth"},
     {"Level", "Hits", "Swing", "Hats"},
+    {"Palette", "Pulse", "Chance", ""},
     {"Echo", "Echo time", "Reverb", "Size"},
     {"Root", "Tune", "MIDI out", "Lights"},
 };
@@ -301,6 +303,10 @@ static void set_view(int v)
 static void button(int b)
 {
     int v;
+    if (b == B_SEQ && ui.view == V_PULSE) {      /* SEQ again: the Sound page (AMB1-SOUND) */
+        set_view(V_SOUND);
+        return;
+    }
     for (v = 0; v < NVIEWS; v++)                 /* a page's button: its page */
         if (VIEW_BTN[v] == b) {
             set_view(v);
@@ -858,7 +864,7 @@ static int help_lines(int b, const char *l[HELP_LINES])
     case B_ENV: L("THE PAD"); L("LEVEL, SWELL, BRIGHT,"); L("COLOUR"); break;
     case B_ARP: L("THE BELLS"); L("LEVEL, DENSITY, TONE,"); L("OCTAVE"); break;
     case B_LFO: L("THE BASS"); L("LEVEL, OCTAVE, GLIDE, FIFTH"); break;
-    case B_SEQ: L("THE PULSE"); L("LEVEL, HITS, SWING, HATS"); break;
+    case B_SEQ: L("THE PULSE"); L("LEVEL, HITS, SWING, HATS"); L("AGAIN: THE SOUND PAGE"); break;
     case B_FX: L("THE SPACE"); L("ECHO, ECHO TIME, REVERB,"); L("SIZE"); break;
     case B_GLO: L("SETUP"); L("ROOT, TUNE, MIDI OUT, LIGHTS"); break;
     case B_EDIT: L("THE NEXT CHORD,"); L("ON THE NEXT BAR"); break;

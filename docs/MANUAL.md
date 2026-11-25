@@ -256,6 +256,19 @@ the layer's level. Turn SELECT to step through the pages in this order.
 - **Swing** pushes the off sixteenths later, from straight (50%) to a heavy lilt (75%).
 - **Hats** goes from dark and long to bright and crisp.
 
+### SEQ again: Sound (unofficial addition)
+
+Press SEQ a second time on the Pulse page (or turn SELECT one step past it) for the Sound page. These three controls
+are an unofficial addition, not part of Charles Vestal's AMB-1; see AMB1-SOUND.md.
+
+- **Palette** at 0 is AMB-1's own sound. Above 0 the bells become struck objects (a bar, a plate, a glass, a pipe)
+  whose material, size and stiffness drift over minutes, and one slow "scene" (brightness, character, room) moves
+  the bells, the pad and the bass together. The notes do not change, only how they sound.
+- **Pulse** chooses Drums (the thump and two hats) or Melodic: the same rhythms, but each hit plays a short plucked
+  note of the chord that is sounding (the thump's rhythm in the low octave, the closed hat's in the middle, the open
+  hat's high). The plucks follow the Palette. MIDI out sends them on channel 4.
+- **Chance** leaves out a share of the hits, from none (0) to all of them played (100). It only acts in Melodic.
+
 ### FX: Space
 
 ![The Space page: ECHO 45, ECHO TIME 1 bar, REVERB 65, SIZE 80](img/screen-space.png "The Space page")
@@ -402,6 +415,9 @@ The defaults are Garden's; each piece has its own.
 | Pulse | Hits | 0–100 | 35 |
 | Pulse | Swing | 50%–75% | 50% |
 | Pulse | Hats | 0–100 | 50 |
+| Sound | Palette | 0–100 | 0 |
+| Sound | Pulse | Drums, Melodic | Drums |
+| Sound | Chance | 0–100 | 100 |
 | Space | Echo | 0–100 | 45 |
 | Space | Echo time | 1/4., 1/2, 1/2., 1 bar, 2 bars, 4 bars | 1 bar |
 | Space | Reverb | 0–100 | 65 |

@@ -1,0 +1,20 @@
+# a project saved before the palette and the pulse sound (format 4) loads with its settings; the three new ones
+# come from each piece's recipe (palette 0 = the stock sound, drums, every hit)
+wait 300
+turn PRESET 4
+expect piece 4
+storev4 41
+reboot
+wait 300
+expect piece 4
+expect par0 41
+expect par24 10
+expect par27 70
+expect par28 0
+expect par29 0
+expect par30 100
+tap SAVE
+reboot
+wait 300
+expect par0 41
+expect par30 100
